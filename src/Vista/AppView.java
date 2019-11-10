@@ -28,9 +28,6 @@ public class AppView {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-
-
-
                 ArrayList<String> datos = new ArrayList<>();
 
                 table1.setModel(new ArchivosTableModel(datos));
