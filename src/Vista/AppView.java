@@ -1,11 +1,14 @@
 package Vista;
 
 import com.company.ArchivosTableModel;
+import com.company.Cliente;
+import com.company.Servidor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AppView {
@@ -25,6 +28,9 @@ public class AppView {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
+
+
+
                 ArrayList<String> datos = new ArrayList<>();
 
                 table1.setModel(new ArchivosTableModel(datos));
@@ -34,6 +40,20 @@ public class AppView {
         buttonDowload.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+        buttonConexion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                try {
+                    Servidor servidor = new Servidor();
+
+
+                } catch (IOException   e) {
+                    e.printStackTrace();
+                }
 
             }
         });
