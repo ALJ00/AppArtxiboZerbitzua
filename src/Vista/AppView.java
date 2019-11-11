@@ -44,13 +44,7 @@ public class AppView {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                try {
-                    Servidor servidor = new Servidor();
 
-
-                } catch (IOException   e) {
-                    e.printStackTrace();
-                }
 
             }
         });

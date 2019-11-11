@@ -61,7 +61,7 @@ public class Servidor {
                         // Enviamos el nombre del archivo
                         flujoSalida.writeUTF( archivorequerido.getName() );
 
-                        // Enviamos el tamaÃ±o del archivo
+                        // Enviamos el tamano del archivo
                         flujoSalida.writeInt( size );
 
                         // utilizo el flujo de salida especial

@@ -29,10 +29,11 @@ public class Cliente {
 
         do {
 
+            // menu que se muestra al usuario
             System.out.println("Menú: \n" +
-                    "a) Listar:\n" +
-                    "b) Bajar fichero:\n" +
-                    "c) Salir:");
+                    "a) Listar\n" +
+                    "b) Bajar fichero\n" +
+                    "c) Salir");
 
             System.out.println("Opción: ");
             opcion = br.readLine();
@@ -43,7 +44,7 @@ public class Cliente {
                     System.out.println("Listado de archivos que hay en el servidor:");
                     flujoSalida.writeUTF(opcion);
 
-                    // obtengo el nº de archivos
+                    // obtengo el nº de archivos del servidor
                     long size = flujoEntrada.readLong();
                     System.out.println("Número de archivos: "+size);
 
@@ -51,6 +52,7 @@ public class Cliente {
                     for (int i = 0; i <size ; i++) {
                         System.out.println("\t" + flujoEntrada.readUTF());
                     }
+
                     break;
                 case "b":
                     // envio la opcion
@@ -69,20 +71,19 @@ public class Cliente {
                         System.out.println("El archivo solicitado NO existe en el servidor");
                     }else{
                         System.out.println(sn.toUpperCase() +" existe el archivo solicitado.");
+
                         // ejecuto la funcion correspondiente que realiza el trabajo
                         recibirArchivoYguardarlo(nombreArchivo);
                     }
 
-
-
-
-
                     break;
                 case "c":
+
                     //envio la opcion c al servidor
                     flujoSalida.writeUTF(opcion);
                     System.out.println("Gracias por utilizar el servcio.");
                     break;
+
                 default:
                     System.out.println("Introduzca una opción correcta: a, b o c.");
 
@@ -111,6 +112,8 @@ public class Cliente {
             switch (caso){
 
                 case "s":
+
+                    // machaco el archivo aunque de la forma en que lo creo no haria falta
                     file.delete();
 
                     // recibo el nombre y size del archivo solicitado
