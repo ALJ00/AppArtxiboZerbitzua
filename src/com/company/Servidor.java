@@ -36,18 +36,22 @@ public class Servidor {
         flujoSalida = new DataOutputStream(socket.getOutputStream());
 
         do {
-
+            System.out.println("Esperando opción del cliente ...");
             opcion = flujoEntrada.readUTF();
-            System.out.println(opcion);
+
 
             switch (opcion) {
 
                 case "a":
+                    System.out.println("Opción requerida :"+opcion+" ----> mandar listado de archivos.");
                     listarArchivosAlCliente(flujoSalida);
                     break;
                 case "b":
+                    System.out.println("Opción requerida :"+opcion+" ----> mandar archivo");
+
                     System.out.println("Esperando nombre del archivo requerido...");
                     String archivoAenviar = flujoEntrada.readUTF();
+
                     System.out.println("El cliente ha pedido el archivo "+archivoAenviar);
 
                     File archivorequerido = new File("directorioservidor/"+archivoAenviar);
@@ -95,6 +99,8 @@ public class Servidor {
 
                     break;
                 case "c":
+
+                    System.out.println("Opción requerida :"+opcion+" ----> fin de servicio");
                     System.out.println("Gracias por utilizar el servicio.");
                     break;
 
