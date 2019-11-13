@@ -27,7 +27,7 @@ El Servidor tendrá la misión de recibir las peticiones del Cliente y enviarle/
 
 ### Video tutorial
 
-[ver el video tutorial]()
+[Ver el video tutorial](https://youtu.be/3CyEX90E7zE)
 
 
 

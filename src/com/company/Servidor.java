@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public class Servidor {
 
-    private static final int PUERTO = 5000;
+    private static final int PUERTO = 5555;
     private static Socket socket;
     private static ServerSocket serverSocket;
     private static DataInputStream flujoEntrada;

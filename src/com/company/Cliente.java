@@ -6,7 +6,7 @@ import java.net.Socket;
 public class Cliente {
 
     private String Host = "localhost";
-    private int Puerto = 5000;
+    private int Puerto = 5555;
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static Socket socket;
     private static String respuesta;
@@ -153,7 +153,7 @@ public class Cliente {
 
                     break;
                 case "n":
-                    System.out.println("El archivo no se ha eliminado");
+                    System.out.println("El archivo no se ha reemplazado");
                     break;
                 default:
                     System.out.println("Introduzca s/n");
@@ -201,4 +201,6 @@ public class Cliente {
 
 
     }
+
+
 }
