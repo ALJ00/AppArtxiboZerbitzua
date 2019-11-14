@@ -18,7 +18,6 @@ public class Servidor {
     private static String opcion;
 
 
-
     public Servidor() throws IOException {
 
         serverSocket = new ServerSocket(PUERTO);
@@ -43,70 +42,89 @@ public class Servidor {
             switch (opcion) {
 
                 case "a":
-                    System.out.println("Opción requerida :"+opcion+" ----> mandar listado de archivos.");
+                    System.out.println("Opción requerida :" + opcion + " ----> mandar listado de archivos.");
                     listarArchivosAlCliente(flujoSalida);
                     break;
                 case "b":
-                    System.out.println("Opción requerida :"+opcion+" ----> mandar archivo");
+                    System.out.println("Opción requerida :" + opcion + " ----> mandar archivo");
 
                     System.out.println("Esperando nombre del archivo requerido...");
                     String archivoAenviar = flujoEntrada.readUTF();
 
-                    System.out.println("El cliente ha pedido el archivo "+archivoAenviar);
+                    System.out.println("El cliente ha pedido el archivo " + archivoAenviar);
 
-                    File archivorequerido = new File("directorioservidor/"+archivoAenviar);
+                    File archivorequerido = new File("directorioservidor/" + archivoAenviar);
 
-                    if(archivorequerido.exists()){
+                    if (archivorequerido.exists()) {
                         flujoSalida.writeUTF("si");
 
-
-                        int size = ( int )archivorequerido.length();
+                        int size = (int) archivorequerido.length();
 
                         // Enviamos el nombre del archivo
-                        flujoSalida.writeUTF( archivorequerido.getName() );
+                        flujoSalida.writeUTF(archivorequerido.getName());
 
                         // Enviamos el tamano del archivo
-                        flujoSalida.writeInt( size );
+                        flujoSalida.writeInt(size);
 
                         // utilizo el flujo de salida especial
-                        System.out.println( "Enviando Archivo: "+archivorequerido.getName());
+                        System.out.println("Enviando Archivo: " + archivorequerido.getName());
 
                         // creo un flujo de entrada para leer el archivo
                         FileInputStream fis = new FileInputStream(archivorequerido);
-                        BufferedInputStream bis = new BufferedInputStream( fis );
+                        BufferedInputStream bis = new BufferedInputStream(fis);
 
                         // Creo el flujo de salida para enviar los datos del archivo
-                        BufferedOutputStream bos = new BufferedOutputStream( socket.getOutputStream());
+                        BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
 
                         // creo un array de tipo byte con el size del archivo
-                        byte[] buffer = new byte[ size ];
+                        byte[] buffer = new byte[size];
 
                         // leo el archivo
                         bis.read(buffer);
 
                         // Realizamos el envio de los bytes que conforman el archivo
-                        for( int i = 0; i < buffer.length; i++ ){
-                            bos.write( buffer[ i ] );
+                        for (int i = 0; i < buffer.length; i++) {
+                            bos.write(buffer[i]);
                         }
 
                         bos.flush();
 
-                        System.out.println( "Archivo Enviado: "+archivorequerido.getName() );
+                        System.out.println("Archivo Enviado: " + archivorequerido.getName());
 
-                    }else{
+                    } else {
                         flujoSalida.writeUTF("no");
                     }
 
                     break;
-                case "c":
 
-                    System.out.println("Opción requerida :"+opcion+" ----> fin de servicio");
+                case "c":
+                    System.out.println("Opción requerida :" + opcion + " ----> recibir archivo");
+
+                    // recibo s/n del cliente
+                    String sn = flujoEntrada.readUTF();
+
+                    if(sn.equalsIgnoreCase("si")){
+
+                        String name = flujoEntrada.readUTF();
+                        System.out.println(sn.toUpperCase()+"Confirmado el envío; "+"Recibiendo el archivo del cliente " + name);
+
+                        recibirArchivoYguardarlo(name);
+                    }else if(sn.equalsIgnoreCase("no")){
+                        System.out.println(sn.toUpperCase()+" confirmada la operación por el cliente");
+
+                    }
+
+
+                    break;
+                case "d":
+
+                    System.out.println("Opción requerida :" + opcion + " ----> fin de servicio");
                     System.out.println("Gracias por utilizar el servicio.");
                     break;
 
             }
 
-        } while (!opcion.equalsIgnoreCase("c"));
+        } while (!opcion.equalsIgnoreCase("d"));
 
         flujoSalida.close();
         flujoEntrada.close();
@@ -117,7 +135,6 @@ public class Servidor {
     public static void main(String[] args) throws IOException {
         new Servidor();
     }
-
 
     public static void listarArchivosAlCliente(DataOutputStream flujoSalida) {
 
@@ -148,5 +165,48 @@ public class Servidor {
 
 
     }
+
+
+    public void recibirArchivoYguardarlo(String nombreArchivo) throws IOException {
+
+        File file = new File("carpetaDelClienteEnServidor/" + nombreArchivo);
+
+        // recibo el nombre y size del archivo solicitado
+        System.out.println("Nombre del archivo a recibir: " + flujoEntrada.readUTF());
+
+        int tam = flujoEntrada.readInt();
+        System.out.println("Tamaño del archivo: " + tam);
+
+        System.out.println("Recibiendo archivo " + nombreArchivo);
+
+
+        // creo el flujo de entrada para indicar donde guardare el archivo
+        FileOutputStream fos = new FileOutputStream("carpetaDelClienteEnServidor/" + nombreArchivo);
+
+
+        //Ruta donde se va a guardar el archivo
+        BufferedOutputStream out = new BufferedOutputStream(fos);
+        BufferedInputStream in = new BufferedInputStream(socket.getInputStream());
+
+        // Creamos el array de bytes para leer los datos del archivo
+        byte[] buffer = new byte[tam];
+
+        // Obtenemos el archivo mediante la lectura de bytes enviados
+        for (int i = 0; i < buffer.length; i++) {
+            buffer[i] = (byte) in.read();
+        }
+
+        // Escribimos el archivo
+        out.write(buffer);
+
+        // Cerramos flujos
+        out.flush();
+
+
+        System.out.println("Archivo " + nombreArchivo + " recibido y guardado correctamente.");
+
+
+    }
+
 
 }
